@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/seats';
+console.log('API_BASE_URL (client): ', API_BASE_URL);
 
 export const getSeats = async () => {
   try {

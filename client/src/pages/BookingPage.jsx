@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import axios from 'axios'
+import { getSeats, bookSeats, resetSeats } from '../services/api.js'
 import SeatLayout from '../components/SeatLayout.jsx'
 import './BookingPage.css'
-
-const API_URL = '/api/seats'
 
 const BookingPage = () => {
   const [seats, setSeats] = useState([])
@@ -21,12 +19,12 @@ const BookingPage = () => {
 
   const fetchSeats = useCallback(async () => {
     try {
-      const res = await axios.get(API_URL)
-      setSeats(res.data)
+      const data = await getSeats()
+      setSeats(data)
     } catch (err) {
       showToast('error', 'Could not fetch seats from the server.')
     }
-  }, [])
+  }, [showToast])
 
   useEffect(() => {
     fetchSeats()
@@ -42,10 +40,8 @@ const BookingPage = () => {
 
     try {
       setSubmitting(true)
-      const res = await axios.post(`${API_URL}/book`, {
-        numSeats: parseInt(numSeats),
-      })
-      showToast('success', res.data.msg || 'Seats booked successfully!')
+      const res = await bookSeats(parseInt(numSeats))
+      showToast('success', res.msg || 'Seats booked successfully!')
       setNumSeats('')
       fetchSeats()
     } catch (err) {
@@ -57,8 +53,8 @@ const BookingPage = () => {
 
   const handleReset = async () => {
     try {
-      const res = await axios.post(`${API_URL}/reset`)
-      showToast('info', res.data.msg)
+      const res = await resetSeats()
+      showToast('info', res.msg)
       fetchSeats()
     } catch (err) {
       showToast('error', 'Failed to reset bookings.')
