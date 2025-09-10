@@ -1,0 +1,44 @@
+:root { --booked-color: #f39c12; --available-color: #2ecc71; }
+
+.seat-layout { 
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); 
+  gap: 5px;
+  width: 100%; 
+  max-width: 320px; 
+  margin: 0 auto; 
+}
+.seat { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  height: 28px; 
+  border-radius: 5px; 
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.seat.available { background-color: var(--available-color); }
+.seat.booked { background-color: var(--booked-color); cursor: not-allowed; }
+
+@media (max-width: 1200px) {
+  .seat-layout {
+    gap: 5px;
+    max-width: 300px; 
+  }
+  .seat {
+    height: 26px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .seat-layout {
+    gap: 4px;
+    max-width: 280px; 
+  }
+  .seat {
+    height: 24px;
+    font-size: 0.75rem;
+  }
+}
