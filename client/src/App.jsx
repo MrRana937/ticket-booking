@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import BookingPage from './pages/BookingPage.jsx';
-import './App.css';
+import './app.css';
 
 function App() {
   return (
