@@ -7,7 +7,6 @@ const db = require('../config/db');
  * avoiding race conditions using transactions
  */
 exports.bookSeats = async (req, res) => {
-    console.log('bookSeats for request');
     const { numSeats } = req.body;
     const userId = null; // TODO:
 

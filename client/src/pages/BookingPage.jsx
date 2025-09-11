@@ -9,13 +9,13 @@ const BookingPage = () => {
   const [seats, setSeats] = useState([])
   const [numSeats, setNumSeats] = useState('')
   const [submitting, setSubmitting] = useState(false)
-  
-  const showToast = (type, text) => {
+  const showToast = useCallback((type, text) => {
     const opts = { position: 'top-right', autoClose: 2500 }
     if (type === 'success') return toast.success(text, opts)
     if (type === 'error') return toast.error(text, opts)
     return toast.info(text, opts)
-  }
+  }, [])
+
 
   const fetchSeats = useCallback(async () => {
     try {
@@ -24,7 +24,8 @@ const BookingPage = () => {
     } catch (err) {
       showToast('error', 'Could not fetch seats from the server.')
     }
-  }, [showToast])
+  }, [showToast]) 
+
 
   useEffect(() => {
     fetchSeats()
@@ -32,12 +33,10 @@ const BookingPage = () => {
 
   const handleBooking = async (e) => {
     e.preventDefault()
-
     if (parseInt(numSeats) < 1 || parseInt(numSeats) > 7) {
       showToast('error', 'Please enter a number between 1 and 7.')
       return
     }
-
     try {
       setSubmitting(true)
       const res = await bookSeats(parseInt(numSeats))
@@ -45,7 +44,10 @@ const BookingPage = () => {
       setNumSeats('')
       fetchSeats()
     } catch (err) {
-      showToast('error', err.response?.data?.msg || 'An error occurred during booking.')
+      showToast(
+        'error',
+        err.response?.data?.msg || 'An error occurred during booking.'
+      )
     } finally {
       setSubmitting(false)
     }
@@ -74,7 +76,6 @@ const BookingPage = () => {
           <p>Available Seats = {availableSeatsCount}</p>
         </div>
       </div>
-
       <div className="controls-container">
         <form onSubmit={handleBooking} className="booking-form">
           <label htmlFor="numSeats">Book Seats</label>
@@ -92,18 +93,18 @@ const BookingPage = () => {
             {submitting ? 'Booking…' : 'Book'}
           </button>
         </form>
-
         <button onClick={handleReset} className="btn reset-btn">
           Reset Booking
         </button>
-
         <ToastContainer />
       </div>
-      {submitting && <div className="overlay"><div className="spinner" /></div>}
+      {submitting && (
+        <div className="overlay">
+          <div className="spinner" />
+        </div>
+      )}
     </div>
   )
 }
 
 export default BookingPage
-
-
